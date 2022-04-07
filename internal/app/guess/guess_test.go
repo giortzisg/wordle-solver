@@ -27,6 +27,19 @@ func Test_FilterWords(t *testing.T) {
 			},
 			expWords: entities.Words{"aaaaa", "adada"},
 		},
+		"Correctly returns words with included and non included on the same letter": {
+			words: entities.Words{"arear", "alert"},
+			guessResp: Guess{
+				letters: []letterHint{
+					{letter: 'a', included: true, position: true},
+					{letter: 'r', included: true, position: false},
+					{letter: 'e', included: true, position: true},
+					{letter: 'a', included: false, position: false},
+					{letter: 'r', included: false, position: false},
+				},
+			},
+			expWords: entities.Words{"alert"},
+		},
 		"Correctly returns words with included characters": {
 			words: entities.Words{"aaaaa", "bbbbbb", "baaaa", "aaaab", "ccccc", "acaaa", "aaaca", "abaaa"},
 			guessResp: Guess{

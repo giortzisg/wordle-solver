@@ -24,6 +24,20 @@ func Test_Solve(t *testing.T) {
 			expWords:    entities.Words{"aaaaa"},
 			expErr:      nil,
 		},
+		"Correctly solves wordle - included and non included on the same letter": {
+			words:       entities.Words{"arear", "alert"},
+			wordGuessed: "arear",
+			hints:       "gygww",
+			expWords:    entities.Words{"alert"},
+			expErr:      nil,
+		},
+		"Correctly solves wordle - more words": {
+			words:       entities.Words{"alate", "algae", "aleye"},
+			wordGuessed: "alate",
+			hints:       "ggwwg",
+			expWords:    entities.Words{"aleye"},
+			expErr:      nil,
+		},
 		"Error on invalid word length": {
 			words:       entities.Words{"aaaaa", "bbbbbb", "baaaa", "aaaab", "ccccc", "acaca"},
 			wordGuessed: "acacaa",

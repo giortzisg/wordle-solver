@@ -77,8 +77,18 @@ func (g Guess) FilterWords(words entities.Words) (possibleMatches entities.Words
 					break
 				}
 			} else if strings.ContainsRune(w, hint.letter) {
-				shouldFilter = true
-				break
+				possibleLetters := 0
+				for _, h := range g.letters {
+					if h.letter == hint.letter {
+						if h.position || h.included {
+							possibleLetters++
+						}
+					}
+				}
+				if strings.Count(w, string(hint.letter)) > possibleLetters {
+					shouldFilter = true
+					break
+				}
 			}
 		}
 		if !shouldFilter {

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/giortzisg/wordle-solver/internal/app/solver"
 	"github.com/giortzisg/wordle-solver/internal/entities"
@@ -25,10 +26,12 @@ func main() {
 	for {
 		fmt.Printf("Enter the word that you guessed\n")
 		wordGuessed, _ := reader.ReadString('\n')
+		wordGuessed = strings.TrimSuffix(wordGuessed, "\n")
 		fmt.Printf("Enter the response to the clue:\n - \033[1mW\033[0m: White \n - \033[33mY\033[0m: Yellow \n - \033[32mG\033[0m: Green \n")
-		hints, _ := reader.ReadString('\n')
+		hint, _ := reader.ReadString('\n')
+		hint = strings.TrimSuffix(hint, "\n")
 
-		words, err = solver.Solve(wordGuessed, hints, words)
+		words, err = solver.Solve(wordGuessed, hint, words)
 		if err != nil {
 			log.Fatal(err)
 		}
