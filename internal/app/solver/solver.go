@@ -2,13 +2,27 @@ package solver
 
 import (
 	_ "embed"
+	"encoding/json"
 	"fmt"
+	"log"
 	"math"
 	"sort"
 
 	"github.com/giortzisg/wordle-solver/internal/app/guess"
 	"github.com/giortzisg/wordle-solver/internal/entities"
 )
+
+//go:embed frequency_map.json
+var frequencyFile []byte
+
+var frequencyMap map[string]float64
+
+func init() {
+	err := json.Unmarshal(frequencyFile, &frequencyMap)
+	if err != nil {
+		log.Fatalf("cannot unmarshal json object: %v", err)
+	}
+}
 
 func calculateWordEntropy(words entities.Words, wordGuessed string) float64 {
 	possibleHints := []string{"g", "y", "w"}
@@ -32,6 +46,8 @@ func calculateWordEntropy(words entities.Words, wordGuessed string) float64 {
 			}
 		}
 	}
+	// scale entropy with the frequency of the word
+	// 	return entropy * frequencyMap[wordGuessed]
 	return entropy
 }
 

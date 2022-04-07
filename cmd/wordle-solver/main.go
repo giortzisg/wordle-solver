@@ -13,10 +13,8 @@ import (
 	"github.com/giortzisg/wordle-solver/internal/entities"
 )
 
-//go:embed internal/entities/words.json
-var wordsFile []byte
-
 func main() {
+	wordsFile := entities.WordsFile
 	var words entities.Words
 	err := json.Unmarshal(wordsFile, &words)
 	if err != nil {
