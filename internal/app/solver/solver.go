@@ -12,11 +12,11 @@ import (
 	"github.com/giortzisg/wordle-solver/internal/entities"
 )
 
-var frequencyMap map[string]float64
+var probabilityMap map[string]float64
 
 func init() {
-	frequencyFile := entities.FrequencyFile
-	err := json.Unmarshal(frequencyFile, &frequencyMap)
+	probabilityFile := entities.ProbabilityMap
+	err := json.Unmarshal(probabilityFile, &probabilityMap)
 	if err != nil {
 		log.Fatalf("cannot unmarshal json object: %v", err)
 	}
@@ -44,9 +44,7 @@ func calculateWordEntropy(words entities.Words, wordGuessed string) float64 {
 			}
 		}
 	}
-	// scale entropy with the frequency of the word
-	// 	return entropy * frequencyMap[wordGuessed]
-	return entropy
+	return entropy * probabilityMap[wordGuessed]
 }
 
 func sortWords(words entities.Words) entities.Words {
