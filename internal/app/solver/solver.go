@@ -12,12 +12,10 @@ import (
 	"github.com/giortzisg/wordle-solver/internal/entities"
 )
 
-//go:embed frequency_map.json
-var frequencyFile []byte
-
 var frequencyMap map[string]float64
 
 func init() {
+	frequencyFile := entities.FrequencyFile
 	err := json.Unmarshal(frequencyFile, &frequencyMap)
 	if err != nil {
 		log.Fatalf("cannot unmarshal json object: %v", err)
