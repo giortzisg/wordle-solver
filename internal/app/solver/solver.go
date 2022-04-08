@@ -8,6 +8,7 @@ import (
 	"math"
 	"sort"
 
+	"github.com/giortzisg/wordle-solver/config"
 	"github.com/giortzisg/wordle-solver/internal/app/guess"
 	"github.com/giortzisg/wordle-solver/internal/entities"
 )
@@ -15,7 +16,7 @@ import (
 var probabilityMap map[string]float64
 
 func init() {
-	probabilityFile := entities.ProbabilityMap
+	probabilityFile := config.ProbabilityMap
 	err := json.Unmarshal(probabilityFile, &probabilityMap)
 	if err != nil {
 		log.Fatalf("cannot unmarshal json object: %v", err)
@@ -35,7 +36,7 @@ func calculateWordEntropy(words entities.Words, wordGuessed string) float64 {
 						if err != nil {
 							return 0
 						}
-						p := g.Probability(words)
+						p := g.Probability(words) * probabilityMap[wordGuessed]
 						if p != 0 {
 							entropy += p * math.Log2(1/p)
 						}
@@ -44,7 +45,7 @@ func calculateWordEntropy(words entities.Words, wordGuessed string) float64 {
 			}
 		}
 	}
-	return entropy * probabilityMap[wordGuessed]
+	return entropy
 }
 
 func sortWords(words entities.Words) entities.Words {

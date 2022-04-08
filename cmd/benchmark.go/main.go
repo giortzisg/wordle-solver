@@ -1,15 +1,14 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"strings"
 
 	_ "embed"
 
+	"github.com/giortzisg/wordle-solver/config"
 	"github.com/giortzisg/wordle-solver/internal/app/solver"
-	"github.com/giortzisg/wordle-solver/internal/entities"
 	"github.com/schollz/progressbar/v3"
 )
 
@@ -29,16 +28,10 @@ func evaluateGuess(guess string, solution string) (hint string) {
 }
 
 func main() {
-	wordsFile := entities.WordsFile
-	var words entities.Words
-	var solutions float64
-	var count float64
-	err := json.Unmarshal(wordsFile, &words)
-	if err != nil {
-		log.Fatalf("cannot unmarshal json object: %v", err)
-	}
-	bar := progressbar.Default(int64(len(words[0:300])))
-	for _, w := range words[0:300] {
+	var solutions, count float64
+	words := config.LoadWords()
+	bar := progressbar.Default(int64(len(words)))
+	for _, w := range words {
 		err := bar.Add(1)
 		if err != nil {
 			log.Fatalf("progress bar error: %v", err)

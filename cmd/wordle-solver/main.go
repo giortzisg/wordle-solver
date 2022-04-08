@@ -3,23 +3,18 @@ package main
 import (
 	"bufio"
 	_ "embed"
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
 	"strings"
 
+	"github.com/giortzisg/wordle-solver/config"
 	"github.com/giortzisg/wordle-solver/internal/app/solver"
-	"github.com/giortzisg/wordle-solver/internal/entities"
 )
 
 func main() {
-	wordsFile := entities.WordsFile
-	var words entities.Words
-	err := json.Unmarshal(wordsFile, &words)
-	if err != nil {
-		log.Fatalf("cannot unmarshal json object: %v", err)
-	}
+	words := config.LoadWords()
+	fmt.Println(len(words))
 	reader := bufio.NewReader(os.Stdin)
 	for {
 		fmt.Printf("Enter the word that you guessed\n")
@@ -29,7 +24,7 @@ func main() {
 		hint, _ := reader.ReadString('\n')
 		hint = strings.TrimSuffix(hint, "\n")
 
-		words, err = solver.Solve(wordGuessed, hint, words)
+		words, err := solver.Solve(wordGuessed, hint, words)
 		if err != nil {
 			log.Fatal(err)
 		}
