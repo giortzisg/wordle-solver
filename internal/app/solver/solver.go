@@ -16,10 +16,12 @@ import (
 
 var probabilityMap map[string]float64
 var possibleHints []string
+var threads int
 
 func init() {
 	probabilityFile := config.ProbabilityMap
 	possibleHints = createAllPossibleHints()
+	threads = 6
 	err := json.Unmarshal(probabilityFile, &probabilityMap)
 	if err != nil {
 		log.Fatalf("cannot unmarshal json object: %v", err)
@@ -82,10 +84,10 @@ func sortWords(words entities.Words) entities.Words {
 
 	wordsWithEntropy := make(map[string]float64, len(words))
 
-	if len(words) < 4 {
+	if len(words) < threads {
 		wordsChunks = chunkSlice(words, 1)
 	} else {
-		wordsChunks = chunkSlice(words, len(words)/4)
+		wordsChunks = chunkSlice(words, len(words)/threads)
 	}
 
 	// spawn go routines to handle the words quicker
