@@ -20,9 +20,13 @@ func main() {
 		fmt.Printf("Enter the word that you guessed\n")
 		wordGuessed, _ := reader.ReadString('\n')
 		wordGuessed = strings.TrimSuffix(wordGuessed, "\n")
+		// trim carriage return for Windows
+		wordGuessed = strings.TrimSuffix(wordGuessed, "\r")
 		fmt.Printf("Enter the response to the clue:\n - \033[1mW\033[0m: White \n - \033[33mY\033[0m: Yellow \n - \033[32mG\033[0m: Green \n")
 		hint, _ := reader.ReadString('\n')
 		hint = strings.TrimSuffix(hint, "\n")
+		// trim carriage return for Windows
+		hint = strings.TrimSuffix(hint, "\r")
 
 		words, err := solver.Solve(wordGuessed, hint, words)
 		if err != nil {
