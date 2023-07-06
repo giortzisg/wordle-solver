@@ -62,6 +62,7 @@ func (g Guess) Probability(words entities.Words) float64 {
 	return float64(len(possibleMatches)) / float64(len(words))
 }
 
+// FilterWords removes all words that are not possible answers based on the given hints
 func (g Guess) FilterWords(words entities.Words) (possibleMatches entities.Words) {
 	for _, w := range words {
 		shouldFilter := false
